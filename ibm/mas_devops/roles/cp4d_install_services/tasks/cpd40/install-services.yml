@@ -37,7 +37,7 @@
 # 3. Approve Install Plan For CP4D Services
 # -----------------------------------------------------------------------------
 - name: "Approve Install Plan For CP4D Services"
-  include_tasks: cp4d_install_services/tasks/cpd40/cp4d-services.yml
+  include_tasks: tasks/cpd40/cp4d-services.yml
   loop: "{{cp4d_services_subscription_labels}}"
 
 # 4. Wait for CP4D Services Subscriptions to be ready
