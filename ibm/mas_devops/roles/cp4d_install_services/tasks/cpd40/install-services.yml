@@ -34,13 +34,18 @@
     definition: "{{ lookup('template', 'templates/cpd40/{{ item }}/subscription.yml') }}"
   with_items: "{{ cpd_services }}"
 
+# 3. Approve Install Plan For CP4D Services
+# -----------------------------------------------------------------------------
+- name: "Approve Install Plan For CP4D Services"
+  include_tasks: cp4d_install_services/tasks/cpd40/cp4d-services.yml
+  loop: "{{cp4d_services_subscription_labels}}"
 
-# 3. Wait for CP4D Services Subscriptions to be ready
+# 4. Wait for CP4D Services Subscriptions to be ready
 # -----------------------------------------------------------------------------
 - include_tasks: "{{ role_path }}/tasks/cpd40/wait_for_subscriptions.yml"
 
 
-# 4. Install CP4D Services CRs
+# 5. Install CP4D Services CRs
 # -----------------------------------------------------------------------------
 - name: "Install Services CR"
   vars:
@@ -51,6 +56,6 @@
   with_items: "{{ cpd_services }}"
 
 
-# 5. Wait for CP4D Services to be ready
+# 6. Wait for CP4D Services to be ready
 # -----------------------------------------------------------------------------
 - include_tasks: "{{ role_path }}/tasks/cpd40/wait_for_services.yml"

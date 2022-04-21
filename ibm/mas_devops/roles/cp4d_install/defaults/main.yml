@@ -26,3 +26,13 @@ cpd_supported_versions: ['cpd35', 'cpd40']
 
 # ------ CPD services namespace ----------------------------------------------------------------------------------------
 cpd_services_namespace: "{{ lookup('env', 'CPD_SERVICES_NAMESPACE') | default('cpd-services', true) }}"
+
+ibm_common_services_subscription_labels:
+  - ibm-common-service-operator.ibm-common-services
+  - ibm-namespace-scope-operator.ibm-common-services
+  - ibm-odlm.ibm-common-services
+
+ibm_common_services_subscription_labels_1:
+  - ibm-zen-operator.ibm-common-services
+  - ibm-cert-manager-operator.ibm-common-services
+  - db2u-operator.ibm-common-services

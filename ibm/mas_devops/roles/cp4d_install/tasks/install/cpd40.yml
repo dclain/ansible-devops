@@ -51,6 +51,53 @@
     definition: "{{ lookup('template', 'templates/cpd40/subscription-cpd-operator.yaml') }}"
   register: _cpd_subscription_result
 
+- name: "Lookup cpd install plan"
+  kubernetes.core.k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: InstallPlan
+    namespace: "{{ cpd_meta_namespace }}"
+    label_selectors:
+      - operators.coreos.com/cpd-platform-operator.ibm-common-services
+  register: cpd_installplan_info
+  retries: 20
+  delay: 10 # Retry for approx 20 minutes (60s * 20 attempts) before giving up
+  until: cpd_installplan_info.resources | length > 0
+
+- name: "Debug information"
+  debug:
+    msg:
+      - "IP Name ........ {{ cpd_installplan_info.resources[0].metadata.name }}"
+
+- name: "Approve the install plan for CPD"
+  when:
+    - cpd_installplan_info.resources[0].status.phase != "Complete"
+    - cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[1] == "cpd-platform-operator.v2.0.7" or cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[0] == "cpd-platform-operator.v2.0.7"
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: operators.coreos.com/v1alpha1
+      kind: InstallPlan
+      metadata:
+        name: "{{ cpd_installplan_info.resources[0].metadata.name }}"
+        namespace: "{{ cpd_meta_namespace }}"
+      spec:
+        approved: true
+
+- name: "Wait for CPD install to complete"
+  when:
+    - cpd_installplan_info.resources[0].status.phase != "Complete"
+    - cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[0] == "cpd-platform-operator.v2.0.7"
+  kubernetes.core.k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: InstallPlan
+    name: "{{ cpd_installplan_info.resources[0].metadata.name }}"
+    namespace: "{{ cpd_meta_namespace }}"
+  register: cpd_installplan_info
+  retries: 20
+  delay: 30 # Retry for approx 10 minutes (20s * 30 attempts) before giving up
+  until:
+    - cpd_installplan_info.resources[0].status.phase is defined
+    - cpd_installplan_info.resources[0].status.phase == "Complete" 
+
 - name: "Wait for cpd-platform-operator-manager to be ready (60s delay)"
   kubernetes.core.k8s_info:
     api_version: apps/v1
@@ -61,6 +108,21 @@
   until: _cpd_subscription.resources[0].status.availableReplicas is defined
   retries: 10 # Approximately 10 minutes before we give up
   delay: 60 # 1 minute
+
+- name: "Install Namespace Operator Subscription"
+  kubernetes.core.k8s:
+    apply: yes
+    definition: "{{ lookup('template', 'templates/cpd40/namespace-scope.yaml') }}"
+  #register: _cpd_subscription_result
+
+# Handle IBM Common Services Install plan approvals when upgragre strategy is set to Manual
+# ibm-common-services operators deployed by CP4D will inherit the inherit CP4D upgrade strategy
+# when its set to Manual, we need to interate those to ensure we do approve the first install plan
+# otherwise CP4D installation wont succeed.
+# -----------------------------------------------------------------------------
+- name: "Approve ibm-common-services InstallPlan"
+  include_tasks: cp4d_install/tasks/install/ibm-common-services.yml
+  loop: "{{ibm_common_services_subscription_labels}}"
 
 - name: "Wait for operand-deployment-lifecycle-manager to be ready (60s delay)"
   kubernetes.core.k8s_info:
@@ -87,6 +149,10 @@
     apply: yes
     definition: "{{ lookup('template', 'templates/cpd40/ibmcpd.yaml') }}"
   register: _cpd_ibmcdp_result
+
+- name: "Approve ibm-common-services InstallPlan"
+  include_tasks: cp4d_install/tasks/install/ibm-common-services.yml
+  loop: "{{ibm_common_services_subscription_labels_1}}"
 
 - name: "Wait for ibm-zen-operator to be ready (60s delay)"
   kubernetes.core.k8s_info:
