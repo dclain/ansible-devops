@@ -151,7 +151,7 @@
   register: _cpd_ibmcdp_result
 
 - name: "Approve ibm-common-services InstallPlan"
-  include_tasks: cp4d_install/tasks/install/ibm-common-services.yml
+  include_tasks: {{ role_path }}/tasks/install/ibm-common-services.yml
   loop: "{{ibm_common_services_subscription_labels_1}}"
 
 - name: "Wait for ibm-zen-operator to be ready (60s delay)"
