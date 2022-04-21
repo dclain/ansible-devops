@@ -121,7 +121,7 @@
 # otherwise CP4D installation wont succeed.
 # -----------------------------------------------------------------------------
 - name: "Approve ibm-common-services InstallPlan"
-  include_tasks: {{ role_path }}/tasks/install/ibm-common-services.yml
+  include_tasks: "{{ role_path }}/tasks/install/ibm-common-services.yml"
   loop: "{{ibm_common_services_subscription_labels}}"
 
 - name: "Wait for operand-deployment-lifecycle-manager to be ready (60s delay)"
@@ -151,7 +151,7 @@
   register: _cpd_ibmcdp_result
 
 - name: "Approve ibm-common-services InstallPlan"
-  include_tasks: {{ role_path }}/tasks/install/ibm-common-services.yml
+  include_tasks: "{{ role_path }}/tasks/install/ibm-common-services.yml"
   loop: "{{ibm_common_services_subscription_labels_1}}"
 
 - name: "Wait for ibm-zen-operator to be ready (60s delay)"
