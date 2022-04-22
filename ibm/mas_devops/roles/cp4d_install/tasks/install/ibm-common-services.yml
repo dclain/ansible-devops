@@ -74,6 +74,6 @@
       when:
         - _item_subscription_result.resources | length > 0
         - _item_subscription_result.resources[0].status is defined
-        - _item_subscription_result.resources[0].status.phase != "Complete"        
+        - _item_subscription_result.resources[0].status.phase is defined and _item_subscription_result.resources[0].status.phase != "Complete"        
   when:
     - (_item_subscription.resources | length == 0 or _item_subscription.resources[0].status.state == 'UpgradePending')
