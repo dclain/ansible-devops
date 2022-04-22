@@ -14,3 +14,20 @@ spec:
     enable: true
   namespaceMembers:
     - "{{ cpd_meta_namespace }}"
+ ---
+apiVersion: operator.ibm.com/v1alpha1
+kind: OperandRequest
+metadata:
+  name: ibm-db2u-operator
+  namespace:"{{ cpd_meta_namespace }}"
+  labels:
+    app.kubernetes.io/instance: operand-deployment-lifecycle-manager
+    app.kubernetes.io/managed-by: operand-deployment-lifecycle-manager
+    app.kubernetes.io/name: operand-deployment-lifecycle-manager
+  namespace: ibm-common-services
+spec:
+  requests:
+    - operands:
+        - name: ibm-db2u-operator
+      registry: common-service
+
