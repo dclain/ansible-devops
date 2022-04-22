@@ -25,7 +25,7 @@
       register: _item_subscription_result
       retries: 20
       delay: 60 # Retry for approx 20 minutes (60s * 20 attempts) before giving up
-      until: _item_subscription_result.resources | length > 0
+      until: _item_subscription_result.resources is defined and _item_subscription_result.resources | length > 0
 
     - name: Lookup Operator install plan
       community.kubernetes.k8s_info:
@@ -74,6 +74,6 @@
       when:
         - _item_subscription_result.resources | length > 0
         - _item_subscription_result.resources[0].status is defined
-        - _item_subscription_result.resources[0].status.phase is defined and _item_subscription_result.resources[0].status.phase != "Complete"        
+        - _item_subscription_result.resources[0].status.state != "Complete"        
   when:
     - (_item_subscription.resources | length == 0 or _item_subscription.resources[0].status.state == 'UpgradePending')
