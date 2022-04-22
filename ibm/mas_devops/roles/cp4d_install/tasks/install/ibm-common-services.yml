@@ -59,5 +59,21 @@
             namespace: "{{ cpd_meta_namespace }}"
           spec:
             approved: true
+
+    - name: "Wait for {{item}} install to complete"
+      community.kubernetes.k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: InstallPlan
+        namespace: "{{ cpd_meta_namespace }}"
+        label_selectors:
+          - "operators.coreos.com/{{item}}"
+      register: item_install_plan
+      retries: 20
+      delay: 60 # Retry for approx 20 minutes (60s * 20 attempts) before giving up
+      until: item_install_plan.resources[0].status.phase == "Complete" 
+      when:
+        - _item_subscription_result.resources | length > 0
+        - _item_subscription_result.resources[0].status is defined
+        - _item_subscription_result.resources[0].status.phase != "Complete"        
   when:
     - (_item_subscription.resources | length == 0 or _item_subscription.resources[0].status.state == 'UpgradePending')
