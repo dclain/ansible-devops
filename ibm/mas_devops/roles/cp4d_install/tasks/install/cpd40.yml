@@ -71,7 +71,7 @@
 - name: "Approve the install plan for CPD"
   when:
     - cpd_installplan_info.resources[0].status.phase != "Complete"
-    - cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[1] == "cpd-platform-operator.v2.0.7" or cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[0] == "cpd-platform-operator.v2.0.7"
+    - (cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[1] is defined and cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[1] == "cpd-platform-operator.v2.0.7") or (cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[0] is defined and cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[0] == "cpd-platform-operator.v2.0.7")
   kubernetes.core.k8s:
     definition:
       apiVersion: operators.coreos.com/v1alpha1
@@ -85,7 +85,7 @@
 - name: "Wait for CPD install to complete"
   when:
     - cpd_installplan_info.resources[0].status.phase != "Complete"
-    - cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[0] == "cpd-platform-operator.v2.0.7"
+    - (cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[1] is defined and cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[1] == "cpd-platform-operator.v2.0.7") or (cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[0] is defined and cpd_installplan_info.resources[0].spec.clusterServiceVersionNames[0] == "cpd-platform-operator.v2.0.7")
   kubernetes.core.k8s_info:
     api_version: operators.coreos.com/v1alpha1
     kind: InstallPlan
