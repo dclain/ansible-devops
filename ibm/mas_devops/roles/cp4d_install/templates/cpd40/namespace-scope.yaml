@@ -23,3 +23,10 @@ metadata:
 spec:
   channel: v3
   installPlanApproval: Automatic
+  name: ibm-namespace-scope-operator
+  source: ibm-operator-catalog
+  sourceNamespace: openshift-marketplace
+  csvInjector:
+    enable: true
+  namespaceMembers:
+    - "{{ cpd_meta_namespace }}"
