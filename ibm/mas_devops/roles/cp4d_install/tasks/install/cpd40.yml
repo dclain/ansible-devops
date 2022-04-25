@@ -63,10 +63,10 @@
   delay: 10 # Retry for approx 20 minutes (60s * 20 attempts) before giving up
   until: cpd_installplan_info.resources | length > 0
 
-- name: "Debug information"
-  debug:
-    msg:
-      - "IP Name ........ {{ cpd_installplan_info.resources[0].metadata.name }}"
+# - name: "Debug information"
+#   debug:
+#     msg:
+#       - "IP Name ........ {{ cpd_installplan_info.resources[0].metadata.name }}"
 
 - name: "Approve the install plan for CPD"
   when:
@@ -149,10 +149,6 @@
     apply: yes
     definition: "{{ lookup('template', 'templates/cpd40/ibmcpd.yaml') }}"
   register: _cpd_ibmcdp_result
-
-- name: "Approve ibm-common-services InstallPlan"
-  include_tasks: "{{ role_path }}/tasks/install/ibm-common-services.yml"
-  loop: "{{ibm_common_services_subscription_labels_1}}"
 
 - name: "Wait for ibm-zen-operator to be ready (60s delay)"
   kubernetes.core.k8s_info:

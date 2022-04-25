@@ -151,7 +151,7 @@ export CPD_ENTITLEMENT_KEY=$SLS_ENTITLEMENT_KEY
 export CPD_VERSION=cpd40
 export MAS_CHANNEL=8.7.x
 export CPD_STORAGE_CLASS=ocs-storagecluster-cephfs
-export CPD_NAMESPACE="ibm-common-services"
+export CPD_NAMESPACE="cpd-operator"
 export CPD_SERVICES_NAMESPACE="cpd-services-${RANDOM_STR}"
 # DB2WH variables
 export DB2WH_META_STORAGE_CLASS=ocs-storagecluster-cephfs
