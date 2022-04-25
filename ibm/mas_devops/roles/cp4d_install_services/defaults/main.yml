@@ -6,6 +6,7 @@ cpd_admin_username: admin
 
 # CPD services namespace
 cpd_services_namespace: "{{ lookup('env', 'CPD_SERVICES_NAMESPACE') | default('cpd-services', true) }}"
+cpd_meta_namespace: "{{ lookup('env', 'CPD_NAMESPACE') | default('ibm-common-services', true) }}"
 
 # MAS Configuration
 mas_instance_id: "{{ lookup('env', 'MAS_INSTANCE_ID') }}"

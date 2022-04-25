@@ -1,5 +1,5 @@
 ---
-cpd_meta_namespace: 'ibm-common-services'
+#cpd_meta_namespace: 'ibm-common-services'
 
 db2wh:
   apiVersion: databases.cpd.ibm.com/v1
