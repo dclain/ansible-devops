@@ -26,6 +26,7 @@ cpd_supported_versions: ['cpd35', 'cpd40']
 
 # ------ CPD services namespace ----------------------------------------------------------------------------------------
 cpd_services_namespace: "{{ lookup('env', 'CPD_SERVICES_NAMESPACE') | default('cpd-services', true) }}"
+cpd_meta_namespace: "{{ lookup('env', 'CPD_NAMESPACE') | default('ibm-common-services', true) }}"
 
 ibm_common_services_subscription_labels:
   - ibm-namespace-scope-operator.ibm-common-services
