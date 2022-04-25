@@ -19,4 +19,4 @@ cpd_wsl_project_description: "{{ lookup('env', 'CPD_WSL_PROJECT_DESCRIPTION') | 
 storage_guid: "{{ 1000 | random | to_uuid | lower }}"
 
 cp4d_services_subscription_labels:
-  - ibm-db2wh-cp4d-operator.ibm-common-services
+  - "ibm-db2wh-cp4d-operator.{{ cpd_meta_namespace }}"
