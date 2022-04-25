@@ -57,7 +57,7 @@
     kind: InstallPlan
     namespace: "{{ cpd_meta_namespace }}"
     label_selectors:
-      - operators.coreos.com/cpd-platform-operator.ibm-common-services
+      - "operators.coreos.com/cpd-platform-operator.{{ cpd_meta_namespace }}"
   register: cpd_installplan_info
   retries: 20
   delay: 10 # Retry for approx 20 minutes (60s * 20 attempts) before giving up
@@ -128,7 +128,7 @@
   kubernetes.core.k8s_info:
     api_version: apps/v1
     name: operand-deployment-lifecycle-manager
-    namespace: "{{ cpd_meta_namespace }}"
+    namespace: ibm-common-services
     kind: Deployment
   register: _operand_subscription
   until: _operand_subscription.resources[0].status.availableReplicas is defined
@@ -154,7 +154,7 @@
   kubernetes.core.k8s_info:
     api_version: apps/v1
     name: ibm-zen-operator
-    namespace: "{{ cpd_meta_namespace }}"
+    namespace: ibm-common-services
     kind: Deployment
   register: _zen_deployment
   until: _zen_deployment.resources[0].status.availableReplicas is defined
