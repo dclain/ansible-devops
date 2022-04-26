@@ -87,5 +87,5 @@
         - _item_subscription_result.resources | length > 0
         - _item_subscription_result.resources[0].status is defined
         - _item_subscription_result.resources[0].status.state != "Complete"        
-  when:
-    - (_item_subscription.resources | length == 0 or _item_subscription.resources[0].status.state == 'UpgradePending')
+  #when:
+  #  - (_item_subscription.resources | length == 0 or _item_subscription.resources[0].status.state == 'UpgradePending')
