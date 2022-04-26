@@ -109,20 +109,20 @@
   retries: 10 # Approximately 10 minutes before we give up
   delay: 60 # 1 minute
 
-- name: "Install Namespace Operator Subscription"
-  kubernetes.core.k8s:
-    apply: yes
-    definition: "{{ lookup('template', 'templates/cpd40/namespace-scope.yaml') }}"
-  #register: _cpd_subscription_result
+# - name: "Install Namespace Operator Subscription"
+#   kubernetes.core.k8s:
+#     apply: yes
+#     definition: "{{ lookup('template', 'templates/cpd40/namespace-scope.yaml') }}"
+#   #register: _cpd_subscription_result
 
-# Handle IBM Common Services Install plan approvals when upgragre strategy is set to Manual
-# ibm-common-services operators deployed by CP4D will inherit the inherit CP4D upgrade strategy
-# when its set to Manual, we need to interate those to ensure we do approve the first install plan
-# otherwise CP4D installation wont succeed.
-# -----------------------------------------------------------------------------
-- name: "Approve ibm-common-services InstallPlan"
-  include_tasks: "{{ role_path }}/tasks/install/ibm-common-services.yml"
-  loop: "{{ibm_common_services_subscription_labels}}"
+# # Handle IBM Common Services Install plan approvals when upgragre strategy is set to Manual
+# # ibm-common-services operators deployed by CP4D will inherit the inherit CP4D upgrade strategy
+# # when its set to Manual, we need to interate those to ensure we do approve the first install plan
+# # otherwise CP4D installation wont succeed.
+# # -----------------------------------------------------------------------------
+# - name: "Approve ibm-common-services InstallPlan"
+#   include_tasks: "{{ role_path }}/tasks/install/ibm-common-services.yml"
+#   loop: "{{ibm_common_services_subscription_labels}}"
 
 - name: "Wait for operand-deployment-lifecycle-manager to be ready (60s delay)"
   kubernetes.core.k8s_info:
