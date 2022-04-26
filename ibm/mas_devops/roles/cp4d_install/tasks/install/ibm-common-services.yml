@@ -23,7 +23,7 @@
   register: _item_subscription_result
   retries: 20
   delay: 60 # Retry for approx 20 minutes (60s * 20 attempts) before giving up
-  until: _item_subscription_result.resources is defined and _item_subscription_result.resources | length > 0
+  until: _item_subscription.resources[0].status.state is defined and _item_subscription_result.resources | length > 0
 
 - name: Lookup and Approve IBM Common Services operators
   block:
