@@ -43,7 +43,7 @@
   kubernetes.core.k8s:
     apply: yes
     definition: "{{ lookup('template', 'templates/cpd40/operatorgroup.yaml') }}"
-  when: _cs_deployment.resources[0] is not defined
+  #when: _cs_deployment.resources[0] is not defined
 
 - name: "Install CPD 4.0 Subscription"
   kubernetes.core.k8s:
